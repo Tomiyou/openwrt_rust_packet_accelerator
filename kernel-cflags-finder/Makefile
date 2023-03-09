@@ -42,7 +42,7 @@ our_flags = $(foreach o,$($(1)),$(call our_addtree,$(o)))
 # Kernel 5.2+: _c_flags, before __c_flags
 
 $(M)/dummy.c:
-	@echo $(NOSTDINC_FLAGS) $(call our_flags,LINUXINCLUDE) $(_c_flags) $(modkern_cflags)
+	@echo $(NOSTDINC_FLAGS) $(call our_flags,LINUXINCLUDE) $(__c_flags) $(_c_flags) $(modkern_cflags)
 	@touch $@
 
 .PHONY: $(M)/dummy.c
