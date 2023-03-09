@@ -7,6 +7,7 @@ use std::process::Command;
 const INCLUDED_TYPES: &[&str] = &[
     "spinlock_t",
     "mutex",
+    "sk_buff",
 ];
 const INCLUDED_FUNCTIONS: &[&str] = &[
     "spin_lock",
@@ -14,7 +15,7 @@ const INCLUDED_FUNCTIONS: &[&str] = &[
     "krealloc",
     "kfree",
 ];
-const INCLUDED_VARS: &[&str] = &["__this_module", "THIS_MODULE", "printk"];
+const INCLUDED_VARS: &[&str] = &["__this_module", "THIS_MODULE"];
 const UNSUPPORTED_ARGS: &[&str] = &[
     "-mfunction-return=thunk-extern",
     "-fzero-call-used-regs=used-gpr",
