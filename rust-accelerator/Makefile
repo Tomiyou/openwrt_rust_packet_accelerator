@@ -26,15 +26,14 @@ ifeq ($(RELEASE),1)
 else
 	BUILD = debug
 endif
-rust_accelerator-objs := target/$(CARGO_TARGET)/$(BUILD)/librust_accelerator.a ../src/c_wrapper.o
+rust_accelerator-objs := src/module.o target/$(CARGO_TARGET)/$(BUILD)/librust_accelerator.a
 
 EXTRA_LDFLAGS += --entry=init_module
 
 all:
-
 	$(MAKE) -C "$(KSRC)" $(MAKE_OPTS) M="$(CURDIR)" V="s" modules
 
 clean:
-# 	$(MAKE) -C "$(KSRC)" $(MAKE_OPTS) M="$(CURDIR)" clean
+	$(MAKE) -C "$(KSRC)" $(MAKE_OPTS) M="$(CURDIR)" clean
 
 endif

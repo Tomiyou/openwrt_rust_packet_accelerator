@@ -28,7 +28,7 @@ impl Drop for HelloWorldModule {
 static mut MODULE: Option<HelloWorldModule> = None;
 
 #[no_mangle]
-pub extern "C" fn init_module() -> c_types::c_int {
+pub extern "C" fn rust_init() -> c_types::c_int {
     match <HelloWorldModule as linux_kernel_module::KernelModule>::init() {
         Ok(m) => {
             unsafe {
@@ -43,20 +43,8 @@ pub extern "C" fn init_module() -> c_types::c_int {
 }
 
 #[no_mangle]
-pub extern "C" fn cleanup_module() {
+pub extern "C" fn rust_cleanup() {
     unsafe {
         MODULE = None;
     }
 }
-
-#[no_mangle]
-#[link_section = ".modinfo"]
-pub static LICENSE: [u8; 12] = *b"license=GPL\0";
-
-#[no_mangle]
-#[link_section = ".modinfo"]
-pub static AUTHOR: [u8; 10] = *b"author=ME\0";
-
-#[no_mangle]
-#[link_section = ".modinfo"]
-pub static DESCRIPTION: [u8; 29] = *b"description=My kernel module\0";
