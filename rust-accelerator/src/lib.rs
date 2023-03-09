@@ -5,16 +5,21 @@ use crate::alloc::string::{String, ToString};
 use linux_kernel_module::c_types;
 use linux_kernel_module::println;
 use linux_kernel_module::bindings;
+use hashbrown::HashMap;
+
+struct Flow {
+    serial: u32,
+}
 
 struct HelloWorldModule {
-    message: String,
+    flows: HashMap<u32, Flow>,
 }
 
 impl linux_kernel_module::KernelModule for HelloWorldModule {
     fn init() -> linux_kernel_module::KernelResult<Self> {
         println!("Hello from Rust!");
         Ok(HelloWorldModule {
-            message: "Hello World!".to_string(),
+            flows: HashMap::new(),
         })
     }
 }
