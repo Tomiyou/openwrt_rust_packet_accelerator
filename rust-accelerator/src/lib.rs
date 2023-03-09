@@ -53,3 +53,9 @@ pub extern "C" fn rust_cleanup() {
         MODULE = None;
     }
 }
+
+#[no_mangle]
+pub extern "C" fn rust_skb_recv(skb: *const bindings::sk_buff) -> c_types::c_int {
+    println!("Rust received network packet!");
+    return 0;
+}
