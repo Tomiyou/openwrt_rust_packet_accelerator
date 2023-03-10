@@ -45,6 +45,11 @@ void cleanup_module(void)
     printk("Goodbye from C!\n");
 }
 
+void bug_helper(void)
+{
+    BUG();
+}
+
 MODULE_DESCRIPTION("Rust port of Shortcut Forwarding Engine");
 MODULE_AUTHOR("Tomaz Hribernik");
 MODULE_LICENSE("GPL");

@@ -8,5 +8,7 @@ extern "C" {
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
-    loop {}
+    unsafe {
+        bug_helper();
+    }
 }
