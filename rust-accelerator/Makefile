@@ -26,7 +26,7 @@ ifeq ($(RELEASE),1)
 else
 	BUILD = debug
 endif
-rust_accelerator-objs := src/module.o target/$(CARGO_TARGET)/$(BUILD)/librust_accelerator.a
+rust_accelerator-objs := ../src/c_wrapper.o src/module.o target/$(CARGO_TARGET)/$(BUILD)/librust_accelerator.a
 
 EXTRA_LDFLAGS += --entry=init_module
 

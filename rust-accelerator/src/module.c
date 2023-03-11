@@ -13,9 +13,6 @@ extern int rust_init(void);
 extern void rust_cleanup(void);
 extern int rust_skb_recv(struct sk_buff *skb);
 
-/* Global variables */
-const gfp_t RUST_GFP_KERNEL = GFP_KERNEL;
-
 int init_module(void)
 {
     int error;
