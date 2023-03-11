@@ -29,9 +29,7 @@ unsafe impl<T: ?Sized + Send> Send for Spinlock<T> {}
 impl<T> Spinlock<T> {
     pub fn new(user_data: T) -> Spinlock<T> {
         let mut lock = bindings::spinlock_t::default();
-        unsafe {
-            spin_lock_init_wrapper(&mut lock);
-        }
+        unsafe { spin_lock_init_wrapper(&mut lock) }
         Spinlock {
             lock: UnsafeCell::new(lock),
             data: UnsafeCell::new(user_data),
@@ -39,10 +37,8 @@ impl<T> Spinlock<T> {
     }
 
     pub fn lock(&self) -> SpinlockGuard<T> {
-        unsafe {
-            spin_lock_wrapper(self.lock.get());
-            println!("Spinlock is locked!");
-        }
+        unsafe { spin_lock_wrapper(self.lock.get()) }
+        println!("Spinlock is locked!");
         SpinlockGuard {
             lock: unsafe { &mut *self.lock.get() },
             data: unsafe { &mut *self.data.get() },
@@ -86,9 +82,7 @@ unsafe impl<T: ?Sized + Send> Send for Mutex<T> {}
 impl<T> Mutex<T> {
     pub fn new(user_data: T) -> Mutex<T> {
         let mut lock = bindings::mutex::default();
-        unsafe {
-            mutex_init_wrapper(&mut lock);
-        }
+        unsafe { mutex_init_wrapper(&mut lock) }
         Mutex {
             lock: UnsafeCell::new(lock),
             data: UnsafeCell::new(user_data),
@@ -96,10 +90,8 @@ impl<T> Mutex<T> {
     }
 
     pub fn lock(&self) -> MutexGuard<T> {
-        unsafe {
-            mutex_lock_wrapper(self.lock.get());
-            println!("Mutex is locked!");
-        }
+        unsafe { mutex_lock_wrapper(self.lock.get()) }
+        println!("Mutex is locked!");
         MutexGuard {
             lock: unsafe { &mut *self.lock.get() },
             data: unsafe { &mut *self.data.get() },
