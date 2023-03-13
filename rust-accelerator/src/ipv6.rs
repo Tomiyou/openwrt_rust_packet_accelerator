@@ -35,8 +35,30 @@ pub struct FlowKey {
 }
 
 #[no_mangle]
-pub fn rust_accel_recv_ipv6(dev: *const bindings::net_device, skb: *const bindings::sk_buff) -> c_types::c_int {
+pub fn rust_accel_recv_ipv6(dev: *const bindings::net_device, skb: *const bindings::sk_buff, pkt_len: u32) -> c_types::c_int {
+    /* First parse the packet headers */
     println!("Rust received network packet!");
+
+    let packet_headers = unsafe {
+        core::slice::from_raw_parts((*skb).data, pkt_len as usize)
+    };
+
+    match pdu::Ip::new(packet_headers) {
+        Ok(pdu::Ip::Ipv6(ipv6_pdu)) => {
+            println!("[ipv6] source_address: {:x?}", ipv6_pdu.source_address().as_ref());
+            println!("[ipv6] destination_address: {:x?}", ipv6_pdu.destination_address().as_ref());
+            println!("[ipv6] protocol: 0x{:02x}", ipv6_pdu.computed_protocol());
+            // upper-layer protocols can be accessed via the inner() method (not shown)
+        }
+        Ok(pdu::Ip::Ipv4(ipv4_pdu)) => {
+            println!("Wrong IPv4 packet {:?}", ipv4_pdu);
+            return 0;
+        }
+        Err(e) => {
+            println!("Unknown packet protocol {:?}", e);
+            return 0;
+        }
+    }
 
     let global = crate::get_global_data();
 

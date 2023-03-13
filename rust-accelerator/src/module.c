@@ -13,8 +13,8 @@ extern int (*athrs_fast_nat_recv)(struct sk_buff *skb);
 /* Rust forward declarations */
 extern int rust_init(void);
 extern void rust_cleanup(void);
-extern int rust_accel_recv_ipv4(struct net_device *dev, struct sk_buff *skb);
-extern int rust_accel_recv_ipv6(struct net_device *dev, struct sk_buff *skb);
+extern int rust_accel_recv_ipv4(struct net_device *dev, struct sk_buff *skb, unsigned int pkt_len);
+extern int rust_accel_recv_ipv6(struct net_device *dev, struct sk_buff *skb, unsigned int pkt_len);
 
 inline bool can_do_ipv4_accel(struct net_device *dev) {
     struct in_device *in4_dev;
@@ -112,13 +112,13 @@ int rust_accel_skb_recv(struct sk_buff *skb) {
 	 */
 	if (likely(htons(ETH_P_IP) == skb->protocol)) {
 		if (can_do_ipv4_accel(dev)) {
-			return rust_accel_recv_ipv4(dev, skb);
+			return rust_accel_recv_ipv4(dev, skb, skb->len);
 		}
 	}
 
 	if (likely(htons(ETH_P_IPV6) == skb->protocol)) {
 		if (can_do_ipv6_accel(dev)) {
-			return rust_accel_recv_ipv6(dev, skb);
+			return rust_accel_recv_ipv6(dev, skb, skb->len);
 		}
 	}
 
