@@ -31,3 +31,10 @@ impl Drop for RustAccelerator {
         println!("Goodbye from Rust!");
     }
 }
+
+pub enum AccelError {
+    UnsupportedProtocol,
+    WrongProtocol,
+    ParsingError,
+    FlowNotFound,
+}

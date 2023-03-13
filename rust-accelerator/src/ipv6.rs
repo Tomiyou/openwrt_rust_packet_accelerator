@@ -26,12 +26,12 @@ pub struct Flow {
 
 #[derive(Eq, Hash, PartialEq, Default)]
 pub struct FlowKey {
-    match_dev: usize,           /* Network device */
-    protocol: u8,               /* Protocol */
-    match_src_ip: Ipv6Addr,     /* Source IP address */
-    match_dest_ip: Ipv6Addr,    /* Destination IP address */
-    match_src_port: u16,        /* Source port */
-    match_dest_port: u16,       /* Destination port */
+    dev: usize,           /* Network device */
+    protocol: u8,         /* Protocol */
+    src_ip: Ipv6Addr,     /* Source IP address */
+    dest_ip: Ipv6Addr,    /* Destination IP address */
+    src_port: u16,        /* Source port */
+    dest_port: u16,       /* Destination port */
 }
 
 #[no_mangle]
