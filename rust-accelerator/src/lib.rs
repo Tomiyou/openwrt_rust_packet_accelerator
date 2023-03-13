@@ -1,20 +1,20 @@
 #![no_std]
 
 extern crate alloc;
-use core::intrinsics::likely;
 
 use linux_kernel_module::c_types;
 use linux_kernel_module::bindings;
+use types::RustAccelerator;
 
 mod ipv4;
 mod ipv6;
 mod types;
 
-static mut MODULE: Option<types::RustAccelerator> = None;
+static mut MODULE: Option<RustAccelerator> = None;
 
 #[no_mangle]
 pub extern "C" fn rust_init() -> c_types::c_int {
-    match <types::RustAccelerator as linux_kernel_module::KernelModule>::init() {
+    match <RustAccelerator as linux_kernel_module::KernelModule>::init() {
         Ok(m) => {
             unsafe {
                 MODULE = Some(m);
@@ -34,18 +34,11 @@ pub extern "C" fn rust_cleanup() {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn rust_skb_recv(skb: *const bindings::sk_buff) -> c_types::c_int {
-    let global = unsafe {
+fn get_global_data() -> &'static RustAccelerator {
+    unsafe {
         match &MODULE {
             Some(m) => m,
-            None => return 0,
+            None => panic!("What the fuck")
         }
-    };
-
-    let protocol = unsafe {
-        (*skb).__bindgen_anon_5.__bindgen_anon_1.as_ref().protocol
-    };
-
-    return ipv4::ipv4_recv(skb, global);
+    }
 }

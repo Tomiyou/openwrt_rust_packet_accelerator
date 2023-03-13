@@ -2,8 +2,6 @@ extern crate alloc;
 use linux_kernel_module::{c_types, println, bindings};
 use core::sync::atomic::{AtomicU32, Ordering};
 
-use crate::types::RustAccelerator;
-
 pub struct Flow {
     /* Connection matching info */
     match_dev: usize,           /* Network device */
@@ -34,14 +32,17 @@ pub struct FlowKey {
     match_dest_port: u16,       /* Destination port */
 }
 
-pub extern "C" fn ipv4_recv(skb: *const bindings::sk_buff, global: &RustAccelerator) -> c_types::c_int {
+#[no_mangle]
+pub fn rust_accel_recv_ipv4(dev: *const bindings::net_device, skb: *const bindings::sk_buff) -> c_types::c_int {
     println!("Rust received network packet!");
+
+    let global = crate::get_global_data();
 
     let flow_key = crate::ipv4::FlowKey::default();
 
     let flow = {
         let guard = global.ipv4_flows.lock();
-    
+
         let flow = match guard.get(&flow_key) {
             Some(flow) => flow,
             None => return 0,
