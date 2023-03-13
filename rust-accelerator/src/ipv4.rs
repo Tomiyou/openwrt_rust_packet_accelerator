@@ -2,20 +2,22 @@ extern crate alloc;
 use linux_kernel_module::{c_types, println, bindings};
 use core::sync::atomic::{AtomicU32, Ordering};
 
+pub type Ipv4Addr = u32;
+
 pub struct Flow {
     /* Connection matching info */
     match_dev: usize,           /* Network device */
     protocol: u8,               /* Protocol */
-    match_src_ip: u32,          /* Source IP address */
-    match_dest_ip: u32,         /* Destination IP address */
+    match_src_ip: Ipv4Addr,     /* Source IP address */
+    match_dest_ip: Ipv4Addr,    /* Destination IP address */
     match_src_port: u16,        /* Source port */
     match_dest_port: u16,       /* Destination port */
 
     /* Translate info */
-    xlate_src_ip: u32,                          /* Source IP address */
-    xlate_dest_ip: u32,                         /* Destination IP address */
-    xlate_src_port: u16,                        /* Source port */
-    xlate_dest_port: u16,                       /* Destination port */
+    xlate_src_ip: Ipv4Addr,     /* Source IP address */
+    xlate_dest_ip: Ipv4Addr,    /* Destination IP address */
+    xlate_src_port: u16,        /* Source port */
+    xlate_dest_port: u16,       /* Destination port */
 
     /* Counters */
     pub rx_packet_count: AtomicU32,
@@ -26,8 +28,8 @@ pub struct Flow {
 pub struct FlowKey {
     match_dev: usize,           /* Network device */
     protocol: u8,               /* Protocol */
-    match_src_ip: u32,          /* Source IP address */
-    match_dest_ip: u32,         /* Destination IP address */
+    match_src_ip: Ipv4Addr,     /* Source IP address */
+    match_dest_ip: Ipv4Addr,    /* Destination IP address */
     match_src_port: u16,        /* Source port */
     match_dest_port: u16,       /* Destination port */
 }
@@ -38,7 +40,7 @@ pub fn rust_accel_recv_ipv4(dev: *const bindings::net_device, skb: *const bindin
 
     let global = crate::get_global_data();
 
-    let flow_key = crate::ipv4::FlowKey::default();
+    let flow_key = FlowKey::default();
 
     let flow = {
         let guard = global.ipv4_flows.lock();

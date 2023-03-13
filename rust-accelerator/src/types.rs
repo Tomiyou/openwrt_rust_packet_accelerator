@@ -6,13 +6,13 @@ use hashbrown::HashMap;
 use hash32::{BuildHasherDefault, FnvHasher};
 
 use crate::ipv4;
-// use crate::ipv6;
+use crate::ipv6;
 
 type FlowKeyHasher = BuildHasherDefault<FnvHasher>;
 
 pub struct RustAccelerator {
     pub ipv4_flows: Mutex<HashMap<ipv4::FlowKey, Arc<ipv4::Flow>, FlowKeyHasher>>,
-    // pub ipv6_flows: Mutex<HashMap<ipv6::FlowKey, Arc<ipv6::Flow>>>,
+    pub ipv6_flows: Mutex<HashMap<ipv6::FlowKey, Arc<ipv6::Flow>, FlowKeyHasher>>,
 }
 
 impl linux_kernel_module::KernelModule for RustAccelerator {
@@ -21,7 +21,7 @@ impl linux_kernel_module::KernelModule for RustAccelerator {
 
         Ok(RustAccelerator {
             ipv4_flows: Mutex::new(HashMap::default()),
-            // ipv6_flows: Mutex::new(HashMap::new()),
+            ipv6_flows: Mutex::new(HashMap::default()),
         })
     }
 }
