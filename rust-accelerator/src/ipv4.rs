@@ -96,6 +96,7 @@ fn accel_tcp(skb: *const bindings::sk_buff, ip_header: &pdu::Ipv4Pdu, tcp_header
         src_port,
         dest_port,
     };
+    println!("Received TCP packet: {} | {} -> {} | {} -> {}", flow_key.protocol, flow_key.src_ip, flow_key.dest_ip, flow_key.src_port, flow_key.dest_port);
 
     /* Lookup flow using key */
     let flow = do_flow_lookup(&flow_key)?;
@@ -138,6 +139,15 @@ pub fn rust_accel_recv_ipv4(dev: *const bindings::net_device, skb: *const bindin
     let packet_headers = unsafe {
         core::slice::from_raw_parts((*skb).data, pkt_len as usize)
     };
+
+    {
+        let mut i: usize = 0;
+        while i < 60 && i < pkt_len as usize {
+            println!("pkt: {}", packet_headers[i]);
+            i += 1;
+        }
+        println!("");
+    }
 
     match accel_ipv4(skb, packet_headers) {
         Ok(_) => 1,

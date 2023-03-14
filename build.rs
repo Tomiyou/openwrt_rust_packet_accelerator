@@ -8,8 +8,6 @@ const INCLUDED_TYPES: &[&str] = &[
     "spinlock_t",
     "mutex",
     "sk_buff",
-    "ipv6hdr",
-    "iphdr",
     "net_device",
 ];
 const INCLUDED_FUNCTIONS: &[&str] = &[
