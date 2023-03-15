@@ -12,7 +12,7 @@ const INCLUDED_TYPES: &[&str] = &[
 ];
 const INCLUDED_FUNCTIONS: &[&str] = &[
     "spin_lock",
-    "_printk",
+    "printk",
     "krealloc",
     "kfree",
 ];

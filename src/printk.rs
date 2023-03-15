@@ -51,12 +51,12 @@ impl fmt::Write for LogLineWriter {
 macro_rules! println {
     () => {{
         unsafe {
-            crate::bindings::_printk("\n\0".as_bytes().as_ptr() as *const i8);
+            crate::bindings::printk("\n\0".as_bytes().as_ptr() as *const i8);
         }
     }};
     ($fmt:expr) => {{
         unsafe {
-            crate::bindings::_printk(concat!($fmt, "\n\0").as_bytes().as_ptr() as *const i8);
+            crate::bindings::printk(concat!($fmt, "\n\0").as_bytes().as_ptr() as *const i8);
         }
     }};
     ($fmt:expr, $($arg:tt)*) => ({
@@ -64,7 +64,7 @@ macro_rules! println {
         let mut writer = $crate::printk::LogLineWriter::new();
         let _ = fmt::write(&mut writer, format_args!(concat!($fmt, "\n\0"), $($arg)*)).unwrap();
         unsafe {
-            crate::bindings::_printk(writer.as_bytes().as_ptr() as *const i8);
+            crate::bindings::printk(writer.as_bytes().as_ptr() as *const i8);
         }
     });
 }
