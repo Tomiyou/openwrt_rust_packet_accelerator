@@ -1,5 +1,2 @@
-[build]
-target = "x86_64-linux-kernel-module.json"
-
 [unstable]
 build-std = ["core", "alloc"]
