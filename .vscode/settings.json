@@ -1,7 +1,8 @@
 {
     "rust-analyzer.cargo.target": "${workspaceFolder}/x86_64-linux-kernel-module.json",
     "rust-analyzer.server.extraEnv": {
-        "RUST_TARGET_PATH": "${workspaceFolder}"
+        "RUST_TARGET_PATH": "${workspaceFolder}",
+        "KSRC": "/lib/modules/6.0.19-060019-generic/build"
     },
     "rust-analyzer.linkedProjects": [
         "./rust-accelerator/Cargo.toml"
